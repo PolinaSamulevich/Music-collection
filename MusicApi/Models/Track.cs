@@ -5,7 +5,7 @@ namespace MusicApi.Models
     {
         public int Id { get; set; }
         [Required(ErrorMessage = "the track name is required")]
-        public int Title { get; set; }
+        public string Title { get; set; }
         public int ArtistId { get; set; }
         public int GenreId { get; set; }
         [Range(1, 3600, ErrorMessage = "incorrect duration")]
