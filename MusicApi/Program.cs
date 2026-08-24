@@ -15,4 +15,30 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.MapGet("/tracks", (TrackRepository repo) => repo.GetAll());
+app.MapGet("/tracks'{id}", (TrackRepository repo, int id) =>
+{
+    var track = repo.GetById(id);
+    if (track == null)
+        return Results.Problem(title: "track is not found", statusCode: 404);
+    return Results.Ok(track);
+})
+.WithSummary("get track by id");
+app.MapPost("/tracks", (TrackRepository repo, Track newTrack) =>
+{
+    repo.Add(newTrack);
+    return Results.Ok(newTrack);
+
+}).WithSummary("add a new track");
+app.MapPut("/tracks,{id}", (TrackRepository repo, int id, Track updatedTrack) =>
+{
+    repo.Update(id, updatedTrack);
+    return Results.Ok($"track is updated");
+}).WithSummary("update track");
+app.MapDelete("/tracks{id}", (TrackRepository repo, int id) =>
+{
+    repo.Delete(id);
+    if (id == null)
+        return Results.NotFound("track id={id} is not found");
+    return Results.Ok("track is deleted");
+}).WithSummary("delete track");
 app.Run();
