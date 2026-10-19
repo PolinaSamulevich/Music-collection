@@ -54,7 +54,7 @@ app.MapGet("/artists/{id}", (int id, ArtistRepository repo) =>
 app.MapGet("/tracks/search", (string query, TrackRepository repo) =>
 {
     var results = repo.Search(query);
-    if (results == null)
+    if (results.Count == 0)
         return Results.NotFound("song is not found");
     return Results.Ok(results);
 }).WithSummary("search track by name");
