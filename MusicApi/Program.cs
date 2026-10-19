@@ -10,6 +10,7 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddValidation();
 builder.Services.AddDbContext<MusicdbContext>(options =>
     options.UseSqlServer("Server=localhost; Database=musicdb; Trusted_Connection=True;TrustServerCertificate=True;"));
 builder.Services.AddScoped<TrackRepository>();
