@@ -102,8 +102,8 @@ app.MapDelete("/tracks/{id}", (TrackRepository repo, int id) =>
 {
     var track = repo.GetById(id);
     if (track == null)
-        return Results.NotFound("track id={id} is not found");
+        return Results.NotFound($"track id={id} is not found");
     repo.Delete(id);
-    return Results.Ok("track is deleted");
+    return Results.NoContent();
 }).WithSummary("delete track");
 app.Run();
