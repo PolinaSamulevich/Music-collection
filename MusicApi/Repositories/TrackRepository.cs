@@ -40,6 +40,10 @@ namespace MusicApi.Repositories
                 _logger.LogInformation("deleted track {Id}. {Title}", id, track.Title);
             }
         }
+        public void SaveChanges()
+        {
+            _context.SaveChanges();
+        }
         public void Update(int id, Track UpdatedTrack)
         {
             var track = GetById(id);
@@ -51,6 +55,20 @@ namespace MusicApi.Repositories
                 track.GenreId = UpdatedTrack.GenreId;
                 _context.SaveChanges();
             }
+        }
+        public List<Track> Search(string query)
+        {
+            var tracks = _context.Tracks
+                .Include(t => t.Artist)
+                .Include(t => t.Genre)
+                .Where(t => t.Title.Contains(query))
+                .ToList();   
+            foreach (var track in tracks)
+            {
+                if (track.Artist != null)
+                    track.Artist.Tracks = null;
+            }
+            return tracks;
         }
     }
 }

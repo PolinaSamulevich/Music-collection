@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music API</title>
+    <link rel="stylesheet" href="/css/site.css?v=3">
+</head>
+<body>
+    <div class="bg-glow"></div>
+
+    <div class="page">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">♪</div>
+                Music API
+            </div>
+            <div style="display:flex;gap:.5rem">
+                <a class="btn btn-ghost" href="/">← На сайт</a>
+                <a class="btn btn-ghost" href="/swagger">Swagger →</a>
+            </div>
+        </header>
+
+        <section class="hero">
+            <div class="wave">
+                <span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+            </div>
+            <h1>Ваша <span>музыкальная</span> коллекция</h1>
+            <p>Вызывайте API прямо отсюда — без Postman</p>
+        </section>
+
+        <div id="response-box" class="response-box is-hidden">
+            <div class="response-meta">
+                <span id="response-status" class="response-status"></span>
+                <span id="response-time" class="response-time"></span>
+            </div>
+            <pre id="response-body" class="response-body"></pre>
+        </div>
+
+        <section class="playground">
+            <h2 class="section-title">Треки</h2>
+
+            <article class="api-card">
+                <div class="api-card-head">
+                    <span class="method method-get">GET</span>
+                    <span class="path">/tracks</span>
+                    <span class="desc">Все треки</span>
+                </div>
+                <div class="api-card-body">
+                    <button type="button" class="btn btn-run" data-action="get-tracks">Выполнить</button>
+                </div>
+            </article>
+
+            <article class="api-card">
+                <div class="api-card-head">
+                    <span class="method method-get">GET</span>
+                    <span class="path">/tracks/{id}</span>
+                    <span class="desc">Трек по id</span>
+                </div>
+                <div class="api-card-body">
+                    <div class="field">
+                        <label for="get-track-id">ID</label>
+                        <input type="number" id="get-track-id" value="1" min="1">
+                    </div>
+                    <button type="button" class="btn btn-run" data-action="get-track">Выполнить</button>
+                </div>
+            </article>
+
+            <article class="api-card">
+                <div class="api-card-head">
+                    <span class="method method-post">POST</span>
+                    <span class="path">/tracks</span>
+                    <span class="desc">Добавить трек</span>
+                </div>
+                <div class="api-card-body">
+                    <div class="form-grid">
+                        <div class="field">
+                            <label for="post-track-title">Название</label>
+                            <input type="text" id="post-track-title" placeholder="Bohemian Rhapsody">
+                        </div>
+                        <div class="field">
+                            <label for="post-track-artist">Artist ID</label>
+                            <input type="number" id="post-track-artist" value="1" min="1">
+                        </div>
+                        <div class="field">
+                            <label for="post-track-genre">Genre ID</label>
+                            <input type="number" id="post-track-genre" value="1" min="1">
+                        </div>
+                        <div class="field">
+                            <label for="post-track-duration">Длительность (сек)</label>
+                            <input type="number" id="post-track-duration" value="180" min="1" max="3600">
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-run" data-action="post-track">Выполнить</button>
+                </div>
+            </article>
+
+            <article class="api-card">
+                <div class="api-card-head">
+                    <span class="method method-put">PUT</span>
+                    <span class="path">/tracks/{id}</span>
+                    <span class="desc">Обновить трек</span>
+                </div>
+                <div class="api-card-body">
+                    <div class="form-grid">
+                        <div class="field">
+                            <label for="put-track-id">ID</label>
+                            <input type="number" id="put-track-id" value="1" min="1">
+                        </div>
+                        <div class="field">
+                            <label for="put-track-title">Название</label>
+                            <input type="text" id="put-track-title" placeholder="Новое название">
+                        </div>
+                        <div class="field">
+                            <label for="put-track-artist">Artist ID</label>
+                            <input type="number" id="put-track-artist" value="1" min="1">
+                        </div>
+                        <div class="field">
+                            <label for="put-track-genre">Genre ID</label>
+                            <input type="number" id="put-track-genre" value="1" min="1">
+                        </div>
+                        <div class="field">
+                            <label for="put-track-duration">Длительность (сек)</label>
+                            <input type="number" id="put-track-duration" value="200" min="1" max="3600">
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-run" data-action="put-track">Выполнить</button>
+                </div>
+            </article>
+
+            <article class="api-card">
+                <div class="api-card-head">
+                    <span class="method method-delete">DELETE</span>
+                    <span class="path">/tracks/{id}</span>
+                    <span class="desc">Удалить трек</span>
+                </div>
+                <div class="api-card-body">
+                    <div class="field">
+                        <label for="delete-track-id">ID</label>
+                        <input type="number" id="delete-track-id" value="1" min="1">
+                    </div>
+                    <button type="button" class="btn btn-run btn-danger" data-action="delete-track">Выполнить</button>
+                </div>
+            </article>
+
+            <h2 class="section-title section-title-spaced">Справочники</h2>
+
+            <article class="api-card">
+                <div class="api-card-head">
+                    <span class="method method-post">POST</span>
+                    <span class="path">/artists</span>
+                    <span class="desc">Добавить артиста</span>
+                </div>
+                <div class="api-card-body">
+                    <div class="field">
+                        <label for="post-artist-name">Имя</label>
+                        <input type="text" id="post-artist-name" placeholder="Queen">
+                    </div>
+                    <button type="button" class="btn btn-run" data-action="post-artist">Выполнить</button>
+                </div>
+            </article>
+
+            <article class="api-card">
+                <div class="api-card-head">
+                    <span class="method method-post">POST</span>
+                    <span class="path">/Genres</span>
+                    <span class="desc">Добавить жанр</span>
+                </div>
+                <div class="api-card-body">
+                    <div class="field">
+                        <label for="post-genre-name">Название</label>
+                        <input type="text" id="post-genre-name" placeholder="Rock">
+                    </div>
+                    <button type="button" class="btn btn-run" data-action="post-genre">Выполнить</button>
+                </div>
+            </article>
+        </section>
+
+        <footer>
+            Music API · Development
+        </footer>
+    </div>
+
+    <script src="/js/app.js?v=3"></script>
+</body>
+</html>

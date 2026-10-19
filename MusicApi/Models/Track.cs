@@ -4,6 +4,7 @@ namespace MusicApi.Models
     public class Track
     {
         public int Id { get; set; }
+        public string? AudioUrl { get; set; }
         [Required(ErrorMessage = "the track name is required")]
         public string Title { get; set; }
         public int ArtistId { get; set; }
