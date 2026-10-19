@@ -81,6 +81,7 @@ app.MapPost("/tracks/{id}/upload", async (int id, IFormFile file, TrackRepositor
     var track = repo.GetById(id);
     if (track == null)
         return Results.NotFound("track is not found");
+    Directory.CreateDirectory("wwwroot/audio");
     var filePath = Path.Combine("wwwroot/audio", $"{id}.mp3");
     using (var stream = new FileStream(filePath, FileMode.Create))
     {
