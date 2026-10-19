@@ -92,8 +92,11 @@ app.MapPost("/tracks/{id}/upload", async (int id, IFormFile file, TrackRepositor
     .DisableAntiforgery();
 app.MapPut("/tracks/{id}", (TrackRepository repo, int id, Track updatedTrack) =>
 {
+    var updTrack = repo.GetById(id);
+    if (updTrack == null)
+       return Results.NotFound($"track {id} is not found");
     repo.Update(id, updatedTrack);
-    return Results.Ok($"track is updated");
+    return Results.NoContent();
 }).WithSummary("update track");
 app.MapDelete("/tracks/{id}", (TrackRepository repo, int id) =>
 {
