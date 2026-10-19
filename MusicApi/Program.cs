@@ -66,7 +66,7 @@ app.MapPost("/artists", (Artist newArtist, MusicdbContext db) =>
 app.MapPost("/tracks", (TrackRepository repo, Track newTrack) =>
 {
     repo.Add(newTrack);
-    return Results.Ok(newTrack);
+    return Results.Created($"/tracks/{newTrack.Title}", newTrack);
 
 }).WithSummary("add a new track");
 app.MapPost("/Genres", (MusicdbContext db, Genre newGenre) =>
