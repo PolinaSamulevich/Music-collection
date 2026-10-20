@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using MusicApi.Data;
 using MusicApi.Models;
 using MusicApi.Repositories;
+using Microsoft.AspNetCore.Identity;
 using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.ConfigureHttpJsonOptions(options =>
@@ -15,6 +16,7 @@ builder.Services.AddDbContext<MusicdbContext>
     (options => options.UseSqlServer(builder.Configuration.GetConnectionString("Musicdb")));
 builder.Services.AddScoped<TrackRepository>();
 builder.Services.AddScoped<ArtistRepository>();
+builder.Services.AddScoped<UserRepository>();
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
@@ -108,4 +110,14 @@ app.MapDelete("/tracks/{id}", (TrackRepository repo, int id) =>
     repo.Delete(id);
     return Results.NoContent();
 }).WithSummary("delete track");
-app.Run();
+app.MapPost("/auth/register", (RegisterRequest request, UserRepository repo) =>
+{
+    var email = repo.GetByEmail(request.Email);
+    if (email == null)
+        return Results.Conflict("user with this email already exists");
+    var user = new User { Email = request.Email };
+    user.PasswordHash = new PasswordHasher<User>().HashPassword(user, request.Password);
+    repo.Add(user);
+    return Results.Created($"/ user /{user.Id}", new { user.Id, user.Email,user.Role});
+}).WithSummary("Register a new user");
+app.Run(); 
