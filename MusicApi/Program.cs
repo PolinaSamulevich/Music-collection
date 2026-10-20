@@ -113,7 +113,7 @@ app.MapDelete("/tracks/{id}", (TrackRepository repo, int id) =>
 app.MapPost("/auth/register", (RegisterRequest request, UserRepository repo) =>
 {
     var email = repo.GetByEmail(request.Email);
-    if (email == null)
+    if (email != null)
         return Results.Conflict("user with this email already exists");
     var user = new User { Email = request.Email };
     user.PasswordHash = new PasswordHasher<User>().HashPassword(user, request.Password);
