@@ -11,8 +11,8 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddValidation();
-builder.Services.AddDbContext<MusicdbContext>(options =>
-    options.UseSqlServer("Server=localhost; Database=musicdb; Trusted_Connection=True;TrustServerCertificate=True;"));
+builder.Services.AddDbContext<MusicdbContext>
+    (options => options.UseSqlServer(builder.Configuration.GetConnectionString("Musicdb")));
 builder.Services.AddScoped<TrackRepository>();
 builder.Services.AddScoped<ArtistRepository>();
 var app = builder.Build();
