@@ -120,4 +120,15 @@ app.MapPost("/auth/register", (RegisterRequest request, UserRepository repo) =>
     repo.Add(user);
     return Results.Created($"/ user /{user.Id}", new { user.Id, user.Email,user.Role});
 }).WithSummary("Register a new user");
+app.MapPost("/auth/login", (LoginRequest request, UserRepository repo) =>
+{
+    var user = repo.GetByEmail(request.Email);
+    if (user == null)
+        return Results.Problem("invalid email or password", statusCode:401);
+    var passwordVerificationResult = new PasswordHasher<User>().VerifyHashedPassword(user, user.PasswordHash, request.Password);
+    if (passwordVerificationResult == PasswordVerificationResult.Failed)
+        return Results.Problem("invalid email  or password", statusCode:401);
+    return Results.Ok("login ok");
+
+}).WithSummary("log in and get a token");
 app.Run(); 
