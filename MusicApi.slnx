@@ -1,3 +1,5 @@
 <Solution>
-  <Project Path="MusicApi/MusicApi.csproj" />
+  <Project Path="MusicApi.WebApi/MusicApi.WebApi.csproj" />
+  <Project Path="MusicApi.Services/MusicApi.Services.csproj" />
+  <Project Path="MusicApi.Context/MusicApi.Context.csproj" />
 </Solution>
