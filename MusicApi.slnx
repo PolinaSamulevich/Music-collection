@@ -1,5 +1,8 @@
 <Solution>
   <Project Path="MusicApi.WebApi/MusicApi.WebApi.csproj" />
   <Project Path="MusicApi.Services/MusicApi.Services.csproj" />
+  <Folder Name="/services/">
+    <Project Path="services/Auth.Api/Auth.Api.csproj" />
+  </Folder>
   <Project Path="MusicApi.Context/MusicApi.Context.csproj" />
 </Solution>

@@ -1,0 +1,64 @@
+# Инфраструктура для микросервисов: база данных, брокер сообщений, кэш.
+# Запуск:   docker compose up -d
+# Остановка: docker compose down        (данные в томах сохраняются)
+# Полный сброс данных: docker compose down -v
+
+name: musicapi
+
+services:
+  # --- SQL Server: одна "машина", внутри неё позже будет три базы (auth_db, users_db, payments_db)
+  sqlserver:
+    # Версия закреплена намеренно: тег "2022-latest" менялся, и свежий образ оказался битым.
+    image: mcr.microsoft.com/mssql/server:2022-CU27-ubuntu-22.04
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${SA_PASSWORD}
+    ports:
+      # слева - порт на вашем компьютере, справа - порт внутри контейнера.
+      # 14333, а не 1433, чтобы не конфликтовать с SQL Server, установленным на Windows.
+      - "14333:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    healthcheck:
+      test: /opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P "$$MSSQL_SA_PASSWORD" -Q "SELECT 1" || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  # --- RabbitMQ: брокер сообщений. Образ "management" включает веб-интерфейс.
+  rabbitmq:
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+    ports:
+      - "5672:5672"     # AMQP: по нему подключаются наши сервисы
+      - "15672:15672"   # веб-интерфейс: http://localhost:15672
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  # --- Redis: быстрое хранилище "ключ -> значение" в памяти, будем использовать как кэш.
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: redis-cli ping
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+# Тома (volumes): папки, которыми Docker управляет сам. Без них данные пропадали бы вместе с контейнером.
+volumes:
+  sqlserver-data:
+  rabbitmq-data:
+  redis-data:
